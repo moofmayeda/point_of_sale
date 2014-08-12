@@ -1,5 +1,5 @@
 class Purchase < ActiveRecord::Base
-  belongs_to :sale
+  has_many :sales
   belongs_to :return
   has_many :items, :through => :sales
 end
