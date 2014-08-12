@@ -12,7 +12,7 @@ describe 'Sale' do
     other_sale = Sale.create({purchase_id: new_purchase.id, item_id: another_product.id, quantity: 2})
     expect(new_purchase.sales).to eq [new_sale, another_sale, other_sale]
   end
-  it "sets a default quantity of 1" do
+  it "quantity has a default value of 1" do
     other_sale = Sale.create({purchase_id: 2, item_id: 4, quantity: 2})
     new_sale = Sale.create({purchase_id: 2, item_id: 3})
     expect(new_sale.quantity).to eq 1

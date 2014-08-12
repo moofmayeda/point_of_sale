@@ -1,6 +1,6 @@
 class Purchase < ActiveRecord::Base
   has_many :sales
-  belongs_to :return
+  has_many :returns
   has_many :items, :through => :sales
 
   def total
@@ -17,5 +17,15 @@ class Purchase < ActiveRecord::Base
       amount += purchase.total
     end
     amount
+  end
+
+  def return item_id, quantity
+    target_sale = self.sales.where(item_id: item_id).first
+    self.returns.create(purchase_id: self.id, item_id: item_id, quantity: quantity)
+    if (target_sale.quantity - quantity) == 0
+      target_sale.destroy
+    else
+      target_sale.update(quantity: target_sale.quantity - quantity)
+    end
   end
 end

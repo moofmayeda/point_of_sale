@@ -4,6 +4,7 @@ require 'item'
 require 'purchase'
 require 'return'
 require 'sale'
+require 'rspec'
 
 database_configurations = YAML::load(File.open('./db/config.yml'))
 test_configuration = database_configurations['test']

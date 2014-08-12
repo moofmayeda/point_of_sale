@@ -30,4 +30,21 @@ describe 'Purchase' do
       expect(Purchase.report_by_date("2014-08-01", "2014-08-15")).to eq 12
     end
   end
+
+  describe "#return" do
+    it 'removes items from sales and adds them to returns' do
+      product1 = Item.create({name: 'slinky', price: 1})
+      product2 = Item.create({name: 'deluxe megazord slinky', price: 2})
+      new_cashier = Cashier.create({name: 'Wønka'})
+      purchase = Purchase.create({date: '2014-08-01', cashier_id: new_cashier.id })
+      sale1 = Sale.create({purchase_id: purchase.id, item_id: product1.id, quantity: 10})
+      sale2 = Sale.create({purchase_id: purchase.id, item_id: product2.id, quantity: 1})
+      purchase.return(product1.id, 2)
+      purchase.return(product2.id, 1)
+      expect(purchase.sales.where(item_id: product1.id).first.quantity).to eq 8
+      expect(purchase.returns.where(item_id: product1.id).first.quantity).to eq 2
+      expect(purchase.returns.where(item_id: product2.id).first.quantity).to eq 1
+      expect(purchase.sales.where(item_id: product2.id)).to eq []
+    end
+  end
 end
